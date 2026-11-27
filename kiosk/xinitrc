@@ -1,0 +1,50 @@
+#!/bin/sh
+# WhereInTheWorld kiosk session: started by startx on tty1 after autologin.
+# Settings live in /etc/whereintheworld/kiosk.conf. Everything else (Tautulli, server,
+# display) is set in the app itself - tap the gear icon at the top right.
+
+GDK_SCALE=2
+ROTATE=""
+SCREEN_OFF=""
+SCREEN_ON=""
+WEBKIT_DISABLE_DMABUF_RENDERER=1
+[ -r /etc/whereintheworld/kiosk.conf ] && . /etc/whereintheworld/kiosk.conf
+export GDK_SCALE WEBKIT_DISABLE_DMABUF_RENDERER
+
+[ -n "$ROTATE" ] && xrandr -o "$ROTATE"
+
+# No screensaver or automatic blanking.
+xset s off
+xset s noblank
+xset dpms 0 0 0
+
+# Optional night-time backlight off, e.g. SCREEN_OFF=23:30 SCREEN_ON=07:00.
+# A tap wakes the screen; it goes dark again within a minute.
+mins() { h=${1%:*}; m=${1#*:}; echo $(( $(expr "$h" + 0) * 60 + $(expr "$m" + 0) )); }
+if [ -n "$SCREEN_OFF" ] && [ -n "$SCREEN_ON" ]; then
+  (
+    off=$(mins "$SCREEN_OFF"); on=$(mins "$SCREEN_ON"); was=""
+    while :; do
+      now=$(mins "$(date +%H:%M)")
+      if [ "$off" -lt "$on" ]; then
+        [ "$now" -ge "$off" ] && [ "$now" -lt "$on" ] && dark=1 || dark=0
+      else
+        { [ "$now" -ge "$off" ] || [ "$now" -lt "$on" ]; } && dark=1 || dark=0
+      fi
+      if [ "$dark" = 1 ]; then xset dpms force off
+      elif [ "$was" = 1 ]; then xset dpms force on
+      fi
+      was=$dark
+      sleep 60
+    done
+  ) &
+fi
+
+# A minimal window manager that makes every window fill the screen.
+matchbox-window-manager -use_titlebar no -use_cursor no &
+
+# Restart WhereInTheWorld if it ever exits.
+while :; do
+  whereintheworld --kiosk
+  sleep 3
+done

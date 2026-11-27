@@ -1,0 +1,17 @@
+{
+  "name": "whereintheworld",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Live Plex streams on a world map, powered by Tautulli",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "tauri": "tauri",
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "android:build": "tauri android build --apk",
+    "preview": "python -m http.server 8790 --directory src"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  }
+}

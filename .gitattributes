@@ -1,0 +1,7 @@
+* text=auto eol=lf
+*.bat text eol=crlf
+*.json -diff
+*.png binary
+*.ico binary
+*.icns binary
+*.jar binary

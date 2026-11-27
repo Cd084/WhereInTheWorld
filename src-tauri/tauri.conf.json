@@ -1,0 +1,50 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "WhereInTheWorld",
+  "mainBinaryName": "whereintheworld",
+  "version": "1.0.0",
+  "identifier": "io.github.cd084.whereintheworld",
+  "build": {
+    "frontendDist": "../src"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "WhereInTheWorld",
+        "width": 1280,
+        "height": 800,
+        "center": true,
+        "minWidth": 800,
+        "minHeight": 500,
+        "resizable": true,
+        "backgroundColor": "#080c11"
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "category": "Video",
+    "shortDescription": "Live Plex streams on a world map",
+    "longDescription": "A full-screen world map of who is streaming from your Plex server, with Tautulli-style activity cards. Powered by Tautulli.",
+    "copyright": "GPL-3.0-or-later",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "webviewInstallMode": { "type": "downloadBootstrapper" }
+    },
+    "linux": {
+      "deb": { "depends": [] }
+    }
+  }
+}
